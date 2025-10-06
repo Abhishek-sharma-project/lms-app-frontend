@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -19,11 +19,12 @@ const CourseTable = () => {
   const navigate = useNavigate();
 
   if (isLoading) return <h1>Loading...</h1>;
-  console.log("data", data);
 
   return (
     <div>
-      <Button onClick={() => navigate("create")}>Create a new course</Button>
+      <Button className="cursor-pointer" onClick={() => navigate("create")}>
+        Create a new course
+      </Button>
       <Table>
         <TableCaption>A list of your recent courses.</TableCaption>
         <TableHeader>
@@ -46,7 +47,12 @@ const CourseTable = () => {
               </TableCell>
 
               <TableCell className="text-right">
-                <Button size="sm" variant="link">
+                <Button
+                  className="cursor-pointer hover:bg-gray-200"
+                  size="sm"
+                  variant="link"
+                  onClick={() => navigate(`${course._id}`)}
+                >
                   <Edit></Edit>
                 </Button>
               </TableCell>

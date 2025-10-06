@@ -118,3 +118,22 @@
     @apply bg-background text-foreground;
   }
 }
+@layer base {
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+    overflow-y: scroll !important;
+  }
+}
+@layer base {
+  html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
+
+  body[data-scroll-locked] {
+    overflow-y: hidden !important;
+    padding-right: var(--radix-scrollbar-size, 0px) !important;
+    margin-right: 0 !important;
+  }
+}
