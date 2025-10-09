@@ -49,7 +49,7 @@ const Profile = () => {
   useEffect(() => {
     if (isSuccess) {
       refetch();
-      toast.success(updateUserData?.data?.message || "Profile updated");
+      toast.success(updateUserData?.message || "Profile updated");
       setOpen(false);
     }
     if (isError) {

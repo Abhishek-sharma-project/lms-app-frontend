@@ -18,9 +18,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from "@/features/api/courseApi";
+import { toast } from "sonner";
 
 const CourseTab = () => {
   const [input, setInput] = useState({
@@ -32,8 +37,33 @@ const CourseTab = () => {
     courseThumbnail: "",
     coursePrice: "",
   });
+  const params = useParams();
+  const courseId = params.courseId;
+
+  const { data: courseByIdData, isLoading: courseByIdLoading } =
+    useGetCourseByIdQuery(courseId, {
+      refetchOnMountOrArgChange: true,
+    });
+
+  useEffect(() => {
+    if (courseByIdData?.course) {
+      const course = courseByIdData?.course;
+      setInput({
+        courseTitle: course.courseTitle,
+        subTitle: course.subTitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        courseThumbnail: "",
+        coursePrice: course.coursePrice,
+      });
+    }
+  }, [courseByIdData]);
 
   const [previewThumbnail, setPreviewThumbnail] = useState("");
+
+  const [editCourse, { data, isSuccess, error, isError, isLoading }] =
+    useEditCourseMutation();
 
   const navigate = useNavigate();
 
@@ -60,14 +90,33 @@ const CourseTab = () => {
     }
   };
 
-  const updateCourseHandler = () => {
-    console.log(input);
+  const updateCourseHandler = async () => {
+    const formData = new FormData();
+    formData.append("courseTitle", input.courseTitle);
+    formData.append("subTitle", input.subTitle);
+    formData.append("description", input.description);
+    formData.append("category", input.category);
+    formData.append("courseLevel", input.courseLevel);
+    formData.append("coursePrice", input.coursePrice);
+    formData.append("courseThumbnail", input.courseThumbnail);
+    await editCourse({ formData, courseId });
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course update");
+    }
+    if (isError) {
+      toast.error(error?.data?.message || "Failed to update course");
+    }
+  }, [isSuccess, isError]);
+
+  if (courseByIdLoading) return <h1>Loading...</h1>;
+
   const isPublished = false;
-  const isLoading = false;
+
   return (
-    <Card>
+    <Card className="w-full max-w-4xl mx-auto">
       <CardHeader className="flex flex-row justify-between">
         <div>
           <CardTitle>Course Details</CardTitle>
@@ -108,7 +157,7 @@ const CourseTab = () => {
             <Label>Description</Label>
             <RichTextEditor input={input} setInput={setInput}></RichTextEditor>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-5">
             <div>
               <Label>Category</Label>
               <Select onValueChange={selectCategory}>
@@ -177,7 +226,7 @@ const CourseTab = () => {
               <img
                 src={previewThumbnail}
                 alt="Course Thumbnail"
-                className="w-64 my-2"
+                className="w-full sm:w-64 my-2 rounded-lg object-cover"
               />
             )}
           </div>
