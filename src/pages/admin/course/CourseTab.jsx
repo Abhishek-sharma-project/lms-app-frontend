@@ -39,6 +39,7 @@ const CourseTab = () => {
   });
   const params = useParams();
   const courseId = params.courseId;
+  const [previewThumbnail, setPreviewThumbnail] = useState("");
 
   const { data: courseByIdData, isLoading: courseByIdLoading } =
     useGetCourseByIdQuery(courseId, {
@@ -49,18 +50,19 @@ const CourseTab = () => {
     if (courseByIdData?.course) {
       const course = courseByIdData?.course;
       setInput({
-        courseTitle: course.courseTitle,
-        subTitle: course.subTitle,
-        description: course.description,
-        category: course.category,
-        courseLevel: course.courseLevel,
+        courseTitle: course.courseTitle || "",
+        subTitle: course.subTitle || "",
+        description: course.description || "",
+        category: course.category || "",
+        courseLevel: course.courseLevel || "",
         courseThumbnail: "",
-        coursePrice: course.coursePrice,
+        coursePrice: course.coursePrice || "",
       });
+      if (course?.courseThumbnail) {
+        setPreviewThumbnail(course.courseThumbnail);
+      }
     }
   }, [courseByIdData]);
-
-  const [previewThumbnail, setPreviewThumbnail] = useState("");
 
   const [editCourse, { data, isSuccess, error, isError, isLoading }] =
     useEditCourseMutation();
@@ -111,7 +113,9 @@ const CourseTab = () => {
     }
   }, [isSuccess, isError]);
 
-  if (courseByIdLoading) return <h1>Loading...</h1>;
+  if (courseByIdLoading) {
+    return <h1 className="text-center py-10">Loading...</h1>;
+  }
 
   const isPublished = false;
 
@@ -155,12 +159,16 @@ const CourseTab = () => {
           </div>
           <div>
             <Label>Description</Label>
-            <RichTextEditor input={input} setInput={setInput}></RichTextEditor>
+            <RichTextEditor
+              input={input}
+              setInput={setInput}
+              courseByIdData={courseByIdData}
+            ></RichTextEditor>
           </div>
           <div className="flex flex-col sm:flex-row flex-wrap gap-5">
             <div>
               <Label>Category</Label>
-              <Select onValueChange={selectCategory}>
+              <Select value={input.category} onValueChange={selectCategory}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -188,7 +196,10 @@ const CourseTab = () => {
             </div>
             <div>
               <Label>Course Level</Label>
-              <Select onValueChange={selectCourseLevel}>
+              <Select
+                value={input.courseLevel}
+                onValueChange={selectCourseLevel}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a course level" />
                 </SelectTrigger>
