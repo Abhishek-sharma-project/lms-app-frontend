@@ -51,8 +51,8 @@ const AddCourse = () => {
       <div className="mb-4">
         <h1 className="font-bold text-xl">Let's add a course</h1>
         <p className="text-sm">
-          Add the course title, select a category, and provide a short
-          description. You can update these later if needed.
+          Add the course title, select a category. You can update these later if
+          needed.
         </p>
       </div>
       <div className="space-y-4">
