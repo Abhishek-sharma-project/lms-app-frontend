@@ -4,16 +4,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCreateLectureMutation } from "@/features/api/courseApi";
+import {
+  useCreateLectureMutation,
+  useGetCourseLectureQuery,
+} from "@/features/api/courseApi";
 import { toast } from "sonner";
+import Lecture from "./Lecture";
 
 const CreateLecture = () => {
-  const [lectureTitle, setLectureTitle] = useState("");
-  const [createLecture, { data, isSuccess, isError, isLoading, error }] =
-    useCreateLectureMutation();
   const params = useParams();
   const courseId = params.courseId;
+
   const navigate = useNavigate();
+  const [lectureTitle, setLectureTitle] = useState("");
+
+  const [createLecture, { data, isSuccess, isError, isLoading, error }] =
+    useCreateLectureMutation();
+
+  const {
+    data: lectureData,
+    isLoading: lectureLoading,
+    isError: lectureError,
+    refetch,
+  } = useGetCourseLectureQuery(courseId);
 
   const createLectureHandler = async () => {
     await createLecture({ lectureTitle, courseId });
@@ -21,7 +34,9 @@ const CreateLecture = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      refetch();
       toast.success(data?.message);
+      setLectureTitle("");
     }
     if (isError) {
       toast.error(error?.data?.message);
@@ -69,6 +84,24 @@ const CreateLecture = () => {
               "Create Lecture"
             )}
           </Button>
+        </div>
+        <div className="mt-10">
+          {lectureLoading ? (
+            <p>Loading lectures...</p>
+          ) : lectureError ? (
+            <p>Failed to load lectures...</p>
+          ) : lectureData.lectures.length === 0 ? (
+            <p>No lecture available</p>
+          ) : (
+            lectureData.lectures.map((lecture, index) => (
+              <Lecture
+                key={lecture._id}
+                lecture={lecture}
+                courseId={courseId}
+                index={index}
+              ></Lecture>
+            ))
+          )}
         </div>
       </div>
     </div>
