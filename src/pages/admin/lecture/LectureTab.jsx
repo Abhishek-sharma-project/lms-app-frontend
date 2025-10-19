@@ -10,19 +10,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
+import { useEditLectureMutation } from "@/features/api/courseApi";
 import axios from "axios";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const MEDIA_API = import.meta.env.VITE_MEDIA_API;
 
 const LectureTab = () => {
-  const [title, setTitle] = useState("");
+  const [lectureTitle, setLectureTitle] = useState("");
   const [uploadVideoInfo, setUploadVideoInfo] = useState(null);
   const [isFree, setIsFree] = useState(false);
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [btnDisable, setBtnDisable] = useState(true);
+
+  const [editLecture, { data, isError, isSuccess, error, isLoading }] =
+    useEditLectureMutation();
+
+  const params = useParams();
+  const { courseId, lectureId } = params;
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
@@ -37,7 +45,6 @@ const LectureTab = () => {
           },
         });
         if (res.data.success) {
-          console.log(res);
           setUploadVideoInfo({
             videoUrl: res.data.data.url,
             publicId: res.data.data.public_id,
@@ -52,6 +59,10 @@ const LectureTab = () => {
         setMediaProgress(false);
       }
     }
+  };
+
+  const editLectureHandler = async () => {
+    await editLecture({ lectureTitle });
   };
 
   return (
@@ -97,7 +108,9 @@ const LectureTab = () => {
           </div>
         )}
         <div className="mt-4">
-          <Button className="cursor-pointer">Update Lecture</Button>
+          <Button onClick={editLectureHandler} className="cursor-pointer">
+            Update Lecture
+          </Button>
         </div>
       </CardContent>
     </Card>

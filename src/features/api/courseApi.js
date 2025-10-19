@@ -52,11 +52,17 @@ export const courseApi = createApi({
         method: "GET",
       }),
     }),
-    editLecture: builder.mutation.query({
-      query: ({ courseId, lectureId }) => ({
+    editLecture: builder.mutation({
+      query: ({
+        lectureTitle,
+        videoInfo,
+        isPreviewFree,
+        courseId,
+        lectureId,
+      }) => ({
         url: `/:${courseId}/lecture/:${lectureId}`,
         method: "POST",
-        
+        body: { lectureTitle, videoInfo, isPreviewFree },
       }),
     }),
   }),
@@ -69,4 +75,5 @@ export const {
   useGetCourseByIdQuery,
   useCreateLectureMutation,
   useGetCourseLectureQuery,
+  useEditLectureMutation,
 } = courseApi;
