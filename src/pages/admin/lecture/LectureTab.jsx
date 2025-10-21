@@ -10,9 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
-import { useEditLectureMutation } from "@/features/api/courseApi";
+import {
+  useEditLectureMutation,
+  useRemoveLectureMutation,
+} from "@/features/api/courseApi";
 import axios from "axios";
-import React, { useState } from "react";
+import { Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -28,6 +32,10 @@ const LectureTab = () => {
 
   const [editLecture, { data, isError, isSuccess, error, isLoading }] =
     useEditLectureMutation();
+  const [
+    removeLecture,
+    { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess },
+  ] = useRemoveLectureMutation();
 
   const params = useParams();
   const { courseId, lectureId } = params;
@@ -62,8 +70,32 @@ const LectureTab = () => {
   };
 
   const editLectureHandler = async () => {
-    await editLecture({ lectureTitle });
+    await editLecture({
+      lectureTitle,
+      videoInfo: uploadVideoInfo,
+      isPreviewFree: isFree,
+      courseId,
+      lectureId,
+    });
   };
+  const removeLectureHandler = async () => {
+    await removeLecture(lectureId);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message);
+    }
+    if (isError) {
+      toast.error(error?.data?.message);
+    }
+  }, [data, isSuccess, isError, error]);
+
+  useEffect(() => {
+    if (removeSuccess) {
+      toast.success(removeData?.message);
+    }
+  }, [removeSuccess]);
 
   return (
     <Card>
@@ -75,15 +107,32 @@ const LectureTab = () => {
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
-          <Button className="cursor-pointer" variant="destructive">
-            Remove Lecture
+          <Button
+            onClick={removeLectureHandler}
+            className="cursor-pointer"
+            variant="destructive"
+            disabled={removeLoading}
+          >
+            {removeLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            ) : (
+              "  Remove Lecture"
+            )}
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         <div>
           <Label>Title</Label>
-          <Input type="text" placeholder="Eg. Introduction to React JS" />
+          <Input
+            type="text"
+            value={lectureTitle}
+            onChange={(e) => setLectureTitle(e.target.value)}
+            placeholder="Eg. Introduction to React JS"
+          />
         </div>
         <div className="my-5">
           <Label>
@@ -108,8 +157,18 @@ const LectureTab = () => {
           </div>
         )}
         <div className="mt-4">
-          <Button onClick={editLectureHandler} className="cursor-pointer">
-            Update Lecture
+          <Button
+            disabled={isLoading}
+            onClick={editLectureHandler}
+            className="cursor-pointer"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+              </>
+            ) : (
+              " Update Lecture "
+            )}
           </Button>
         </div>
       </CardContent>
