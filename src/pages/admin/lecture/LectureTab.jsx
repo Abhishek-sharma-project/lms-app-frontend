@@ -12,12 +12,13 @@ import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import {
   useEditLectureMutation,
+  useGetLectureByIdQuery,
   useRemoveLectureMutation,
 } from "@/features/api/courseApi";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const MEDIA_API = import.meta.env.VITE_MEDIA_API;
@@ -25,10 +26,15 @@ const MEDIA_API = import.meta.env.VITE_MEDIA_API;
 const LectureTab = () => {
   const [lectureTitle, setLectureTitle] = useState("");
   const [uploadVideoInfo, setUploadVideoInfo] = useState(null);
+  const [previewVideo, setPreviewVideo] = useState(null);
   const [isFree, setIsFree] = useState(false);
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [btnDisable, setBtnDisable] = useState(true);
+
+  const navigate = useNavigate();
+  const params = useParams();
+  const { courseId, lectureId } = params;
 
   const [editLecture, { data, isError, isSuccess, error, isLoading }] =
     useEditLectureMutation();
@@ -36,13 +42,25 @@ const LectureTab = () => {
     removeLecture,
     { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess },
   ] = useRemoveLectureMutation();
+  const { data: lectureData, refetch } = useGetLectureByIdQuery(lectureId);
+  const lecture = lectureData?.lecture;
 
-  const params = useParams();
-  const { courseId, lectureId } = params;
+  useEffect(() => {
+    if (lecture) {
+      setLectureTitle(lecture?.lectureTitle);
+      setIsFree(lecture?.isPreviewFree);
+      setUploadVideoInfo({
+        videoUrl: lecture?.videoUrl,
+        publicId: lecture.publicId,
+      });
+      setPreviewVideo(lecture?.videoUrl);
+    }
+  }, [lecture]);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setPreviewVideo(URL.createObjectURL(file)); // show before upload
       const formData = new FormData();
       formData.append("file", file);
       setMediaProgress(true);
@@ -58,6 +76,7 @@ const LectureTab = () => {
             publicId: res.data.data.public_id,
           });
           setBtnDisable(false);
+          setPreviewVideo(res.data.data.url); // show after upload
           toast.success(res.data.message);
         }
       } catch (error) {
@@ -84,6 +103,7 @@ const LectureTab = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      refetch();
       toast.success(data?.message);
     }
     if (isError) {
@@ -94,6 +114,7 @@ const LectureTab = () => {
   useEffect(() => {
     if (removeSuccess) {
       toast.success(removeData?.message);
+      navigate(`/admin/course/${courseId}/lecture`);
     }
   }, [removeSuccess]);
 
@@ -146,8 +167,24 @@ const LectureTab = () => {
             onChange={fileChangeHandler}
           />
         </div>
+        {previewVideo && (
+          <div className="my-4">
+            <p className="mb-2 font-medium">Video Preview:</p>
+            <video
+              src={previewVideo}
+              controls
+              width="300"
+              className="rounded"
+            />
+          </div>
+        )}
         <div className="flex items-center space-x-2 my-5">
-          <Switch id="free" className="cursor-pointer" />
+          <Switch
+            id="free"
+            checked={isFree}
+            onCheckedChange={setIsFree}
+            className="cursor-pointer"
+          />
           <Label htmlFor="free">Is this video Free ?</Label>
         </div>
         {mediaProgress && (
