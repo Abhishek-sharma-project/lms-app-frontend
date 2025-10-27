@@ -62,7 +62,7 @@ export const courseApi = createApi({
         lectureId,
       }) => ({
         url: `/${courseId}/lecture/${lectureId}`,
-        method: "POST",
+        method: "PATCH",
         body: { lectureTitle, videoInfo, isPreviewFree },
       }),
     }),
@@ -79,6 +79,18 @@ export const courseApi = createApi({
         method: "GET",
       }),
     }),
+    publishCourse: builder.mutation({
+      query: ({ courseId, query }) => ({
+        url: `/${courseId}?publish=${query}`,
+        method: "PATCH",
+      }),
+    }),
+    removeCourse: builder.mutation({
+      query: (courseId) => ({
+        url: `/course/${courseId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -92,4 +104,6 @@ export const {
   useEditLectureMutation,
   useRemoveLectureMutation,
   useGetLectureByIdQuery,
+  usePublishCourseMutation,
+  useRemoveCourseMutation,
 } = courseApi;

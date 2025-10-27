@@ -45,7 +45,7 @@ const CreateLecture = () => {
 
   useEffect(() => {
     refetch();
-  }, [lectureData]);
+  }, []);
 
   return (
     <div className="flex-1 mx-10">
