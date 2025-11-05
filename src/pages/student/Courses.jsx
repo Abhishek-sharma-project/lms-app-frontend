@@ -1,10 +1,19 @@
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Course from "./Course";
+import { useGetPublishedCourseQuery } from "@/features/api/courseApi";
 
 const Courses = () => {
-  const courses = [1, 2, 3, 4, 5, 6, 7, 8];
-  const isLoading = false;
+  const { data, isError, isLoading } = useGetPublishedCourseQuery();
+
+  if (isError) {
+    return (
+      <h1 className="text-center py-20 text-2xl text-gray-700">
+        Failed to load course details. Please refresh the page.
+      </h1>
+    );
+  }
+
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
@@ -14,7 +23,10 @@ const Courses = () => {
             ? Array.from({ length: 8 }).map((_, index) => (
                 <CourseSkeleton key={index}></CourseSkeleton>
               ))
-            : courses.map((_, i) => <Course key={i}></Course>)}
+            : data?.courses &&
+              data.courses.map((course, i) => (
+                <Course key={i} course={course}></Course>
+              ))}
         </div>
       </div>
     </div>
