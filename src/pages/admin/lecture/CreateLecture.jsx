@@ -57,8 +57,8 @@ const CreateLecture = () => {
         </p>
       </div>
       <div className="space-y-4">
-        <div>
-          <Label>Title</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="mx-1">Title</Label>
           <Input
             type="text"
             value={lectureTitle}

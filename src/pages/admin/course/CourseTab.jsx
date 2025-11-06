@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useFetcher, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useEditCourseMutation,
   useGetCourseByIdQuery,
@@ -109,7 +109,16 @@ const CourseTab = () => {
     }
   };
 
+  const validateCourseFields = () => {
+    if (!input.courseLevel || !input.coursePrice) {
+      toast.info("Add course level and price first!");
+      return false;
+    }
+    return true;
+  };
+
   const updateCourseHandler = async () => {
+    if (!validateCourseFields()) return;
     const formData = new FormData();
     formData.append("courseTitle", input.courseTitle);
     formData.append("subTitle", input.subTitle);
@@ -123,6 +132,7 @@ const CourseTab = () => {
 
   const publishStatusHandler = async (action) => {
     try {
+      if (!validateCourseFields()) return;
       const response = await publishCourse({ courseId, query: action });
       if (response.data) {
         refetch();
@@ -173,7 +183,7 @@ const CourseTab = () => {
             Make changes to your courses here. Click save when you're done.
           </CardDescription>
         </div>
-        <div className="space-x-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <Button
             disabled={courseByIdData?.course.lectures.length === 0}
             variant="outline"
@@ -203,8 +213,8 @@ const CourseTab = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4 mt-5">
-          <div>
-            <Label>Title</Label>
+          <div className="flex flex-col gap-2">
+            <Label className="mx-1">Title</Label>
             <Input
               type="text"
               name="courseTitle"
@@ -213,8 +223,8 @@ const CourseTab = () => {
               placeholder="Eg. Full Stack Developer"
             />
           </div>
-          <div>
-            <Label>Subtitle</Label>
+          <div className="flex flex-col gap-2">
+            <Label className="mx-1">Subtitle</Label>
             <Input
               type="text"
               name="subTitle"
@@ -223,8 +233,8 @@ const CourseTab = () => {
               placeholder="Eg. Become a fullstack developer from basic to advance"
             />
           </div>
-          <div>
-            <Label>Description</Label>
+          <div className="flex flex-col gap-2">
+            <Label className="mx-1">Description</Label>
             <RichTextEditor
               input={input}
               setInput={setInput}
@@ -232,10 +242,10 @@ const CourseTab = () => {
             ></RichTextEditor>
           </div>
           <div className="flex flex-col sm:flex-row flex-wrap gap-5">
-            <div>
-              <Label>Category</Label>
+            <div className="flex flex-col gap-2">
+              <Label className="mx-1 cursor-pointer">Category</Label>
               <Select value={input.category} onValueChange={selectCategory}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] cursor-pointer">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -260,13 +270,15 @@ const CourseTab = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label>Course Level</Label>
+            <div className="flex flex-col gap-2">
+              <Label className="flex items-center gap-0.5 mx-1">
+                Course Level<span className="text-red-500">*</span>
+              </Label>
               <Select
                 value={input.courseLevel}
                 onValueChange={selectCourseLevel}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] cursor-pointer">
                   <SelectValue placeholder="Select a course level" />
                 </SelectTrigger>
                 <SelectContent>
@@ -279,20 +291,22 @@ const CourseTab = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label>Price in (INR)</Label>
+            <div className="flex flex-col gap-2">
+              <Label className="flex items-center gap-0.5 mx-1">
+                Price in (INR)<span className="text-red-500">*</span>
+              </Label>
               <Input
                 type="number"
                 placeholder="Enter course price"
                 value={input.coursePrice}
                 onChange={changeEventHandler}
                 name="coursePrice"
-                className="w-fit"
+                className="w-fit [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           </div>
-          <div>
-            <Label>Course Thumbnail</Label>
+          <div className="flex flex-col gap-2">
+            <Label className="mx-1">Course Thumbnail</Label>
             <Input
               type="file"
               accept="image/*"

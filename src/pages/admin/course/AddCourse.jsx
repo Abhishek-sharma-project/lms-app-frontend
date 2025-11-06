@@ -56,8 +56,8 @@ const AddCourse = () => {
         </p>
       </div>
       <div className="space-y-4">
-        <div>
-          <Label>Title</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="mx-1">Title</Label>
           <Input
             type="text"
             value={courseTitle}
@@ -65,10 +65,10 @@ const AddCourse = () => {
             placeholder="Your Course Name"
           ></Input>
         </div>
-        <div>
-          <Label>Category</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="mx-1">Category</Label>
           <Select onValueChange={getSelectedCategory}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] cursor-pointer">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>

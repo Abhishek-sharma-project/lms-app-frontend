@@ -146,8 +146,8 @@ const LectureTab = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div>
-          <Label>Title</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="mx-1">Title</Label>
           <Input
             type="text"
             value={lectureTitle}
@@ -155,10 +155,8 @@ const LectureTab = () => {
             placeholder="Eg. Introduction to React JS"
           />
         </div>
-        <div className="my-5">
-          <Label>
-            Video <span className="text-red-500">*</span>
-          </Label>
+        <div className="my-5 flex flex-col gap-2">
+          <Label className="mx-1">Video</Label>
           <Input
             type="file"
             accept="video/*"
@@ -195,11 +193,11 @@ const LectureTab = () => {
         )}
         <div className="mt-4">
           <Button
-            disabled={isLoading}
+            disabled={isLoading || mediaProgress}
             onClick={editLectureHandler}
             className="cursor-pointer"
           >
-            {isLoading ? (
+            {isLoading || mediaProgress ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
               </>
