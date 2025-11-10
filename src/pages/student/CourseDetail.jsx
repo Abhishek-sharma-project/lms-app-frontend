@@ -39,7 +39,7 @@ const CourseDetail = () => {
 
   const handleContinueCourse = () => {
     if (purchased) {
-      navigate(``);
+      navigate(`/course-progress/${courseId}`);
     }
   };
 

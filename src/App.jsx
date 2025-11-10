@@ -16,6 +16,7 @@ import CreateLecture from "./pages/admin/lecture/CreateLecture";
 import EditLecture from "./pages/admin/lecture/EditLecture";
 import CourseDetail from "./pages/student/CourseDetail";
 import Purchase from "./components/Purchase";
+import CourseProgress from "./pages/student/CourseProgress";
 
 const App = () => {
   const appRouter = createBrowserRouter([
@@ -51,6 +52,10 @@ const App = () => {
         {
           path: "purchase/:transactionId",
           element: <Purchase></Purchase>,
+        },
+        {
+          path: "course-progress/:courseId",
+          element: <CourseProgress></CourseProgress>,
         },
 
         // admin routes
