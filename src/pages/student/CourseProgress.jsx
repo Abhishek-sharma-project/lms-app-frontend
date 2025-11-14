@@ -25,6 +25,7 @@ const CourseProgress = () => {
       isSuccess: completedSuccess,
       isError: completeError,
       error: markCompleteError,
+      reset: resetComplete,
     },
   ] = useCompleteCourseMutation();
   const [
@@ -34,6 +35,7 @@ const CourseProgress = () => {
       isSuccess: inCompletedSuccess,
       isError: inCompleteError,
       error: markInCompleteError,
+      reset: resetInComplete,
     },
   ] = useInCompleteCourseMutation();
 
@@ -43,29 +45,22 @@ const CourseProgress = () => {
     if (completedSuccess) {
       refetch();
       toast.success(markCompleteData?.message);
+      resetComplete();
     }
     if (completeError) {
       toast.error(markCompleteError?.data?.message);
+      resetComplete();
     }
     if (inCompletedSuccess) {
       refetch();
       toast.success(markInCompleteData?.message);
+      resetInComplete();
     }
     if (inCompleteError) {
       toast.error(markInCompleteError?.data?.message);
+      resetInComplete();
     }
-  }, [
-    completedSuccess,
-    completeError,
-    inCompletedSuccess,
-    inCompleteError,
-    markCompleteData,
-    markInCompleteError,
-    markInCompleteData,
-    markInCompleteError,
-  ]);
-
-
+  }, [completedSuccess, completeError, inCompletedSuccess, inCompleteError]);
 
   if (isLoading) {
     return <p className="text-center py-10">Loading...</p>;
