@@ -136,7 +136,11 @@ const CourseTab = () => {
       const response = await publishCourse({ courseId, query: action });
       if (response.data) {
         refetch();
-        toast.success(response.data.message);
+        toast.success(response.data?.message);
+      }
+
+      if (response.error) {
+        toast.error(response.error.data?.message);
       }
     } catch (error) {
       toast.error("Failed to update status");
@@ -185,7 +189,6 @@ const CourseTab = () => {
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button
-            disabled={courseByIdData?.course.lectures.length === 0}
             variant="outline"
             className="cursor-pointer"
             onClick={() =>
@@ -306,7 +309,9 @@ const CourseTab = () => {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Label className="mx-1">Course Thumbnail</Label>
+            <Label className="mx-1 gap-0.5">
+              Course Thumbnail <span className="text-red-500">*</span>
+            </Label>
             <Input
               type="file"
               accept="image/*"

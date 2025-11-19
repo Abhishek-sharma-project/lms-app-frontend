@@ -88,11 +88,19 @@ const AddCourse = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => navigate("/admin/course")}>
+        <div className="flex items-center gap-2 cursor-pointer">
+          <Button
+            className="cursor-pointer"
+            variant="outline"
+            onClick={() => navigate("/admin/course")}
+          >
             Back
           </Button>
-          <Button disabled={isLoading} onClick={createCourseHandler}>
+          <Button
+            className="cursor-pointer"
+            disabled={isLoading}
+            onClick={createCourseHandler}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"></Loader2>

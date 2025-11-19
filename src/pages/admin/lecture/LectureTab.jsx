@@ -156,7 +156,9 @@ const LectureTab = () => {
           />
         </div>
         <div className="my-5 flex flex-col gap-2">
-          <Label className="mx-1">Video</Label>
+          <Label className="mx-1 gap-0.5">
+            Video <span className="text-red-500">*</span>
+          </Label>
           <Input
             type="file"
             accept="video/*"

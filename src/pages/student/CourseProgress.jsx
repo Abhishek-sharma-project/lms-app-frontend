@@ -63,7 +63,7 @@ const CourseProgress = () => {
   }, [completedSuccess, completeError, inCompletedSuccess, inCompleteError]);
 
   if (isLoading) {
-    return <p className="text-center py-10">Loading...</p>;
+    return <p className="mt-20 text-center py-10">Loading...</p>;
   }
 
   if (isError) {

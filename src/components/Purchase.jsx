@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, CheckCircle2, XCircle, Lock } from "lucide-react";
@@ -19,6 +19,7 @@ const Purchase = () => {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState(null);
   const [webhook, { isLoading }] = useWebhookMutation();
+  const navigate = useNavigate();
   const location = useLocation();
   const { course, transactionId } = location.state || {};
 
@@ -49,6 +50,9 @@ const Purchase = () => {
       }
       if (purchaseStatus === "completed") {
         toast.success("Payment Successful");
+        setTimeout(() => {
+          navigate(-1);
+        }, 4000);
       }
       if (purchaseStatus === "failed") {
         toast.error("Payment Failed");
