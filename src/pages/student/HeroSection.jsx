@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim !== "") {
+      navigate(`/course/search?query=${searchQuery}`);
+    }
+    setSearchQuery("");
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 py-24 px-6 text-center">
       {/* Subtle background accents */}
@@ -22,9 +34,14 @@ const HeroSection = () => {
         </p>
 
         {/* Search box */}
-        <form className="flex items-stretch bg-white/95 dark:bg-gray-800/95 rounded-full shadow-2xl overflow-hidden max-w-2xl mx-auto mb-10 backdrop-blur">
+        <form
+          onSubmit={searchHandler}
+          className="flex items-stretch bg-white/95 dark:bg-gray-800/95 rounded-full shadow-2xl overflow-hidden max-w-2xl mx-auto mb-10 backdrop-blur"
+        >
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search courses, topics or instructors"
             className="flex-grow bg-transparent border-none focus:outline-none px-6 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />

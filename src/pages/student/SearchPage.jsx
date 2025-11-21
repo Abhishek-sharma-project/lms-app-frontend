@@ -6,9 +6,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import SearchResult from "./SearchResult";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useGetSearchCourseQuery } from "@/features/api/courseApi";
 
 const SearchPage = () => {
-  const isLoading = false;
+  const { data, isLoading } = useGetSearchCourseQuery();
   const isEmpty = false;
 
   return (
