@@ -27,13 +27,24 @@ const categories = [
   { id: "nodejs", label: "Node JS" },
 ];
 
-const FilterPage = () => {
-  const handleCategoryChange = (categoryId) => {};
+const FilterPage = ({ selectedCategories, sortByPrice, onFilterChange }) => {
+  const handleCategoryChange = (categoryId, checked) => {
+    const updated = checked
+      ? [...selectedCategories, categoryId]
+      : selectedCategories.filter((id) => id !== categoryId);
+
+    onFilterChange(updated, sortByPrice);
+  };
+
+  const selectByPriceHandler = (value) => {
+    onFilterChange(selectedCategories, value);
+  };
+
   return (
     <div className="w-full md:w-[20%]">
       <div className="flex items-center justify-between">
         <h1 className="font-semibold text-lg md:text-xl">Filter Options</h1>
-        <Select>
+        <Select onValueChange={selectByPriceHandler}>
           <SelectTrigger className="cursor-pointer">
             <SelectValue placeholder="Sort by"></SelectValue>
           </SelectTrigger>
@@ -54,11 +65,14 @@ const FilterPage = () => {
       <div>
         <h1 className="font-semibold mb-2">CATEGORY</h1>
         {categories.map((category) => (
-          <div className="flex items-center space-x-2 my-2">
+          <div key={category.id} className="flex items-center space-x-2 my-2">
             <Checkbox
               id={category.id}
+              checked={selectedCategories.includes(category.id)}
               className="cursor-pointer border-gray-600"
-              onCheckedChange={() => handleCategoryChange(category.id)}
+              onCheckedChange={(checked) =>
+                handleCategoryChange(category.id, checked)
+              }
             ></Checkbox>
             <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               {category.label}

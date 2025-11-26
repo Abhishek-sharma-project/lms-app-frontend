@@ -19,14 +19,15 @@ export const courseApi = createApi({
       invalidatesTags: ["Refetch_Creator_Course"],
     }),
     getSearchCourse: builder.query({
-      query: ({ searchQuery, categories, sortByPrice }) => {
+      query: ({ searchQuery, categories, sortByPrice, page, limit }) => {
         // Build query string
         let queryString = `/search?query=${encodeURIComponent(searchQuery)}`;
 
         // append category
         if (categories && categories.length > 0) {
-          const categoriesString = categories.map(encodeURIComponent).join(",");
-          queryString += `&categories=${categoriesString}`;
+          categories.forEach((category) => {
+            queryString += `&categories=${encodeURIComponent(category)}`;
+          });
         }
 
         // append sortByPrice if available
@@ -34,11 +35,19 @@ export const courseApi = createApi({
           queryString += `&sortByPrice=${encodeURIComponent(sortByPrice)}`;
         }
 
+        queryString += `&page=${page}&limit=${limit}`;
+
         return {
           url: queryString,
           method: "GET",
         };
       },
+    }),
+    getSuggestion: builder.query({
+      query: (query) => ({
+        url: `/course/suggestion?query=${query}`,
+        method: "GET",
+      }),
     }),
     getPublishedCourse: builder.query({
       query: () => ({
@@ -125,6 +134,7 @@ export const courseApi = createApi({
 export const {
   useCreateCourseMutation,
   useGetSearchCourseQuery,
+  useLazyGetSuggestionQuery,
   useGetPublishedCourseQuery,
   useGetCreatorCourseQuery,
   useEditCourseMutation,
