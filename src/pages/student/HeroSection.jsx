@@ -66,7 +66,6 @@ const HeroSection = () => {
           <input
             type="text"
             value={searchQuery}
-            // onChange={(e) => setSearchQuery(e.target.value)}
             onChange={handleInputChange}
             placeholder="Search courses, topics or instructors"
             className="flex-grow bg-transparent border-none focus:outline-none px-6 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"

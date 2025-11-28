@@ -113,7 +113,7 @@ const Profile = () => {
           </div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="mt-2">
+              <Button size="sm" className="mt-2 cursor-pointer">
                 Edit Profile
               </Button>
             </DialogTrigger>
