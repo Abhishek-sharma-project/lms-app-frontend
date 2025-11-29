@@ -155,14 +155,14 @@ const CourseProgress = () => {
         {/* Lecture Sidebar */}
         <div className="flex flex-col w-full md:w-2/5 border-t md:border-t-0 md:border-l border-gray-200 md:pl-4 pt-4 md:pt-0">
           <h2 className="font-semibold text-xl mb-4">Course Lecture</h2>
-          <div className="flex-1 overflow-y-auto ">
+          <div className="flex-1 overflow-y-auto">
             {courseDetails?.lectures.map((lecture) => (
               <Card
                 key={lecture._id}
                 className={`mb-3 hover:cursor-pointer transition transform p-4 ${
                   lecture._id === currentLecture?._id
-                    ? "bg-gray-200"
-                    : "dark:bg-gray-800"
+                    ? "bg-gray-200 dark:bg-gray-700"
+                    : "dark:bg-gray-900"
                 }`}
                 onClick={() => handleSelectLecture(lecture)}
               >

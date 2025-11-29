@@ -61,7 +61,7 @@ const HeroSection = () => {
         {/* Search box */}
         <form
           onSubmit={searchHandler}
-          className="flex items-stretch bg-white/95 dark:bg-gray-800/95 rounded-full shadow-2xl overflow-hidden max-w-2xl mx-auto mb-10 backdrop-blur"
+          className="flex items-stretch bg-white/95 dark:bg-gray-900 rounded-full shadow-2xl overflow-hidden max-w-2xl mx-auto mb-10 backdrop-blur"
         >
           <input
             type="text"
@@ -108,7 +108,7 @@ const HeroSection = () => {
         <Button
           onClick={() => navigate("/course/search?query")}
           size="lg"
-          className="bg-white dark:bg-gray-800 text-blue-700 font-medium rounded-full px-10 py-4 cursor-pointer shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="bg-white dark:bg-gray-900 text-blue-700 font-medium rounded-full px-10 py-4 cursor-pointer shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
           Browse All Courses
         </Button>

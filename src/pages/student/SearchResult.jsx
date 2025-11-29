@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const SearchResult = ({ course }) => {
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-300 py-4 gap-4 transition-all duration-300 hover:bg-gray-100 hover:shadow-md cursor-pointer">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-300 py-4 gap-4 transition-all duration-300 hover:bg-gray-100 hover:shadow-md cursor-pointer hover:dark:bg-gray-900">
       <Link
         to={`/course-detail/${course._id}`}
         className="flex flex-col md:flex-row gap-4 w-full md:w-auto"

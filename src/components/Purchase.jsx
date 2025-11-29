@@ -74,26 +74,24 @@ const Purchase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center items-center p-4 md:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl flex flex-col md:flex-row overflow-hidden border border-gray-200 mt-15">
-        <div className="md:w-1/2 bg-gray-100 p-6 flex flex-col justify-between">
+    <div className="min-h-screen flex justify-center items-center p-4 md:p-8">
+      <div className="w-full max-w-4xl rounded-2xl flex flex-col md:flex-row overflow-hidden border border-gray-200 mt-15">
+        <div className="md:w-1/2 p-6 flex flex-col bg-gray-100 dark:bg-gray-800 justify-between">
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Order Summary
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
             <div className="flex flex-col items-center">
               <img
                 src={course.courseThumbnail}
                 alt="course"
                 className="w-full md:w-4/5 h-40 md:h-48 rounded-lg object-cover shadow-sm mb-4 mx-auto"
               />
-              <h3 className="font-semibold text-lg text-gray-800 text-center">
+              <h3 className="font-semibold text-lg text-center">
                 {course.courseTitle}
               </h3>
               <p className="text-gray-500 text-sm text-center mt-1">
                 Instant access after successful payment
               </p>
-              <div className="w-full mt-6 border-t pt-3 flex justify-between text-base font-semibold text-gray-800">
+              <div className="w-full mt-6 border-t pt-3 flex justify-between text-base font-semibold">
                 <p>Total Amount</p>
                 <p>₹{course.coursePrice}</p>
               </div>
@@ -101,12 +99,10 @@ const Purchase = () => {
           </div>
         </div>
 
-        <div className="md:w-1/2 p-8 bg-white flex flex-col justify-center">
+        <div className="md:w-1/2 p-8 flex flex-col justify-center">
           <div className="flex items-center justify-center mb-6 gap-2">
             <Lock className="text-green-600 w-5 h-5" />
-            <h2 className="text-lg font-semibold text-gray-800">
-              Secure Payment Gateway
-            </h2>
+            <h2 className="text-lg font-semibold">Secure Payment Gateway</h2>
           </div>
 
           {/* user info */}
@@ -124,9 +120,7 @@ const Purchase = () => {
           </div>
 
           {/* payment method */}
-          <p className="font-medium text-gray-700 mb-2">
-            Select Payment Method
-          </p>
+          <p className="font-medium mb-2">Select Payment Method</p>
           <div className="flex gap-2 mb-6">
             {["card", "upi", "netbanking"].map((purchase) => (
               <Button
@@ -180,10 +174,8 @@ const Purchase = () => {
           {isLoading && (
             <div className="text-center space-y-2 mb-5">
               <Loader2 className="animate-spin text-blue-600 w-6 h-6 mx-auto" />
-              <p className="text-gray-600 text-sm">
-                Processing your payment securely...
-              </p>
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <p className="text-sm">Processing your payment securely...</p>
+              <div className="w-full rounded-full h-2 overflow-hidden">
                 <div
                   className="bg-blue-600 h-2 rounded-full transition-all"
                   style={{ width: `${progress}%` }}
@@ -217,7 +209,7 @@ const Purchase = () => {
             </Button>
           )}
 
-          <p className="text-gray-400 text-xs text-center mt-4">
+          <p className="text-xs text-center mt-4">
             Your payment information is encrypted and secure
           </p>
         </div>

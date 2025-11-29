@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { GraduationCap, Menu } from "lucide-react";
+import { Code2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -53,9 +53,13 @@ const Navbar = () => {
       {/* Desktop */}
       <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
         <Link to="/" className="flex items-center gap-2">
-          <GraduationCap size={30}></GraduationCap>
-          <h1 className="hidden md:block font-extrabold text-2xl">
-            E-Learning
+          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-teal-400 dark:from-blue-400 dark:to-teal-300">
+            <Code2 size={22} color="white" strokeWidth={2.4} />
+          </div>
+
+          <h1 className="hidden md:block font-extrabold text-2xl tracking-wide text-gray-900 dark:text-white">
+            Code
+            <span className="text-blue-600 dark:text-blue-400">Stack</span>
           </h1>
         </Link>
         {/* user icon and dark mode icon */}
@@ -91,7 +95,7 @@ const Navbar = () => {
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                {user.role === "instructor" && (
+                {user?.role === "instructor" && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -126,8 +130,16 @@ const Navbar = () => {
       </div>
       {/* Mobile Device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-2xl">E-Learning</h1>
-        <MobileNavbar></MobileNavbar>
+        <Link to="/" className="flex items-center gap-2">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-teal-400 dark:from-blue-400 dark:to-teal-300">
+            <Code2 size={22} color="white" strokeWidth={2.4} />
+          </div>
+          <h1 className="font-extrabold text-xl tracking-wide text-gray-900 dark:text-white">
+            Code
+            <span className="text-blue-600 dark:text-blue-400">Stack</span>
+          </h1>
+        </Link>
+        <MobileNavbar user={user} />
       </div>
     </div>
   );
@@ -135,8 +147,25 @@ const Navbar = () => {
 
 export default Navbar;
 
-const MobileNavbar = () => {
-  const role = "student";
+const MobileNavbar = ({ user }) => {
+  const navigate = useNavigate();
+  const [logoutUser, { data, isSuccess, error, isError }] =
+    useLogoutUserMutation();
+
+  const logoutHandler = async () => {
+    await logoutUser();
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "User log out");
+      navigate("/login");
+    }
+    if (isError) {
+      toast.error(error?.message || "Failed to log out");
+    }
+  }, [isSuccess, isError]);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -150,18 +179,33 @@ const MobileNavbar = () => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-6">
-          <SheetTitle>E-Learning</SheetTitle>
+          <SheetTitle onClick={() => navigate("/")}>CodeStack</SheetTitle>
           <DarkMode className="mr-10"></DarkMode>
         </SheetHeader>
         <Separator className="mr-2"></Separator>
         <nav className="flex flex-col space-y-4 ml-4">
-          <span>My Learning</span>
-          <span>Edit Profile</span>
-          <p>Log out</p>
+          <SheetClose asChild>
+            <Link to="/my-learning">My Learning</Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link to="/profile">Edit Profile</Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <button className="text-left" onClick={logoutHandler}>
+              Log out
+            </button>
+          </SheetClose>
         </nav>
-        {role === "instructor" ? (
+        {user?.role === "instructor" ? (
           <SheetFooter>
-            <Button type="submit">Dashboard</Button>
+            <SheetClose asChild>
+              <Button
+                type="submit"
+                onClick={() => navigate("/admin/dashboard")}
+              >
+                Dashboard
+              </Button>
+            </SheetClose>
             <SheetClose asChild>
               <Button variant="outline">Close</Button>
             </SheetClose>

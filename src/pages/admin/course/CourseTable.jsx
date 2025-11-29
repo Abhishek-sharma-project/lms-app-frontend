@@ -53,7 +53,7 @@ const CourseTable = () => {
 
                 <TableCell className="text-right">
                   <Button
-                    className="cursor-pointer hover:bg-gray-200"
+                    className="cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700"
                     size="sm"
                     variant="link"
                     onClick={() => navigate(`${course._id}`)}

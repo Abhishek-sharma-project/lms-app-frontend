@@ -52,7 +52,7 @@ const SearchPage = () => {
             result for "{query}"
           </h1>
           <p>
-            Showing results for {" "}
+            Showing results for{" "}
             <span className="text-blue-800 font-bold italic">
               {query || ` ""`}
             </span>
@@ -83,7 +83,7 @@ const SearchPage = () => {
                 <button
                   onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 cursor-pointer"
+                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 cursor-pointer dark:bg-gray-800"
                 >
                   Prev
                 </button>
@@ -99,7 +99,7 @@ const SearchPage = () => {
                     )
                   }
                   disabled={page === data?.totalPages}
-                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 cursor-pointer"
+                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 cursor-pointer dark:bg-gray-800"
                 >
                   Next
                 </button>

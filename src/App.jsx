@@ -3,7 +3,7 @@ import Login from "../src/pages/Login";
 import HeroSection from "./pages/student/HeroSection";
 import MainLayout from "./layout/MainLayout";
 import { createBrowserRouter } from "react-router-dom";
-import { RouterProvider } from "react-router";
+import { Navigate, RouterProvider } from "react-router";
 import Courses from "./pages/student/Courses";
 import MyLearning from "./pages/student/MyLearning";
 import Profile from "./pages/student/Profile";
@@ -24,7 +24,6 @@ import {
   ProtectedRoute,
 } from "./components/ProtectedRoutes";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
-import { ThemeProvide } from "./components/ThemeProvide";
 
 const App = () => {
   const appRouter = createBrowserRouter([
@@ -43,11 +42,7 @@ const App = () => {
         },
         {
           path: "login",
-          element: (
-            <AuthenticatedUser>
-              <Login></Login>
-            </AuthenticatedUser>
-          ),
+          element: <Login></Login>,
         },
         {
           path: "my-learning",
@@ -104,11 +99,15 @@ const App = () => {
         {
           path: "admin",
           element: (
-            // <AdminRoute>
-            <Sidebar></Sidebar>
-            // </AdminRoute>
+            <AdminRoute>
+              <Sidebar></Sidebar>
+            </AdminRoute>
           ),
           children: [
+            {
+              index: true,
+              element: <Navigate to="dashboard" replace />,
+            },
             {
               path: "dashboard",
               element: <Dashboard></Dashboard>,
@@ -140,9 +139,7 @@ const App = () => {
   ]);
   return (
     <main>
-      <ThemeProvide>
-        <RouterProvider router={appRouter}></RouterProvider>
-      </ThemeProvide>
+      <RouterProvider router={appRouter}></RouterProvider>
     </main>
   );
 };
