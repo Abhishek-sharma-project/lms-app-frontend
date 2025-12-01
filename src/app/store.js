@@ -7,7 +7,18 @@ import { courseProgressApi } from "@/features/api/courseProgressApi";
 export const appStore = configureStore({
   reducer: rootReducer,
   middleware: (deafultMiddleware) =>
-    deafultMiddleware().concat(
+    deafultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          "courseProgressApi/executeMutation/fulfilled",
+          "courseProgressApi/executeQuery/fulfilled",
+        ],
+        ignoredPaths: [
+          "courseProgressApi.mutations",
+          "courseProgressApi.queries",
+        ],
+      },
+    }).concat(
       authApi.middleware,
       courseApi.middleware,
       purchaseApi.middleware,
@@ -20,4 +31,5 @@ const initializeApp = async () => {
     authApi.endpoints.loadUser.initiate({}, { forceRefetch: true })
   );
 };
+
 initializeApp();

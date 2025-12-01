@@ -15,11 +15,24 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
 import {
+  useDeleteUserMutation,
   useLoadUserQuery,
   useUpdateUserMutation,
 } from "@/features/api/authApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -36,6 +49,9 @@ const Profile = () => {
       isError,
     },
   ] = useUpdateUserMutation();
+
+  const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation();
+  const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     const file = e.target.files?.[0];
@@ -75,6 +91,16 @@ const Profile = () => {
   };
 
   const saveChnages = (name && name !== user?.name) || profilePhoto;
+
+  const handleDeleteProfile = async () => {
+    try {
+      const res = await deleteUser().unwrap();
+      toast.success(res.message || "Profile deleted successfully");
+      navigate("/login");
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to delete profile");
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 my-24">
@@ -162,6 +188,48 @@ const Profile = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          {/* Delete Profile */}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                className="mt-4 w-full cursor-pointer"
+              >
+                Delete Profile
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. <br />
+                  Your account, courses, lectures & all related data will be
+                  permanently deleted.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel className="cursor-pointer">
+                  Cancel
+                </AlertDialogCancel>
+
+                <AlertDialogAction
+                  onClick={handleDeleteProfile}
+                  className="bg-red-600 hover:bg-red-700 cursor-pointer"
+                >
+                  {deleteLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    "Delete"
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
       <div>

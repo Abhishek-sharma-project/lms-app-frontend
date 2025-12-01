@@ -38,6 +38,21 @@ export const courseProgressApi = createApi({
       }),
       invalidatesTags: ["Refetch_Course_Progress"],
     }),
+    getCertificate: builder.mutation({
+      query: (courseId) => ({
+        url: `/${courseId}/certificate`,
+        method: "GET",
+        responseHandler: async (response) => {
+          const type = response.headers.get("Content-Type");
+
+          if (type?.includes("application/pdf")) {
+            return await response.blob();
+          }
+
+          return await response.json();
+        },
+      }),
+    }),
   }),
 });
 
@@ -46,4 +61,5 @@ export const {
   useUpdateLectureProgressMutation,
   useCompleteCourseMutation,
   useInCompleteCourseMutation,
+  useGetCertificateMutation,
 } = courseProgressApi;

@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Course from "./Course";
 import { useGetPublishedCourseQuery } from "@/features/api/courseApi";
 
 const Courses = () => {
-  const { data, isError, isLoading } = useGetPublishedCourseQuery();
+  const { data, isError, isLoading, refetch } = useGetPublishedCourseQuery();
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (isError) {
     return (

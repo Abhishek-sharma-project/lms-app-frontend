@@ -30,7 +30,6 @@ const LectureTab = () => {
   const [isFree, setIsFree] = useState(false);
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [btnDisable, setBtnDisable] = useState(true);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -75,7 +74,6 @@ const LectureTab = () => {
             videoUrl: res.data.data.url,
             publicId: res.data.data.public_id,
           });
-          setBtnDisable(false);
           setPreviewVideo(res.data.data.url); // show after upload
           toast.success(res.data.message);
         }

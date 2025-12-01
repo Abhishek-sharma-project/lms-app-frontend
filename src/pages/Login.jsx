@@ -18,6 +18,13 @@ import {
 } from "@/features/api/authApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Login = () => {
   const [
@@ -50,10 +57,12 @@ const Login = () => {
     name: "",
     email: "",
     password: "",
+    role: "",
   });
 
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
 
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
@@ -73,7 +82,17 @@ const Login = () => {
   useEffect(() => {
     if (registerIsSuccess) {
       toast.success(registerData?.message || "Signup Successful");
+
+      // Reset signup fields
+      setSignupInput({
+        name: "",
+        email: "",
+        password: "",
+        role: "",
+      });
     }
+
+    setActiveTab("login");
 
     if (registerError) {
       toast.error(registerError?.data?.message || "Signup Failed");
@@ -91,12 +110,16 @@ const Login = () => {
   }, [loginIsSuccess, loginData, loginError]);
 
   return (
-    <div className="flex items-center w-full justify-center mt-20">
+    <div className="flex items-center w-full justify-center mt-18">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <Tabs defaultValue="login">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signup">Signup</TabsTrigger>
-            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger className="cursor-pointer" value="signup">
+              Signup
+            </TabsTrigger>
+            <TabsTrigger className="cursor-pointer" value="login">
+              Login
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="signup">
             <Card>
@@ -129,6 +152,27 @@ const Login = () => {
                     onChange={(e) => changeInputHandler(e, "signup")}
                   />
                 </div>
+                <div className="grid gap-3">
+                  <Label>Role</Label>
+                  <Select
+                    value={signupInput.role}
+                    onValueChange={(value) =>
+                      setSignupInput({ ...signupInput, role: value })
+                    }
+                  >
+                    <SelectTrigger className="w-full cursor-pointer">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem className="cursor-pointer" value="student">
+                        Student
+                      </SelectItem>
+                      <SelectItem className="cursor-pointer" value="instructor">
+                        Instructor
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="grid gap-3 relative">
                   <Label>Password</Label>
                   <Input
@@ -143,7 +187,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowSignupPassword(!showSignupPassword)}
-                    className="absolute right-3 top-9 text-gray-500"
+                    className="absolute right-3 top-9 text-gray-500 cursor-pointer"
                   >
                     {showSignupPassword ? (
                       <EyeOff size={18} />
@@ -155,6 +199,7 @@ const Login = () => {
               </CardContent>
               <CardFooter>
                 <Button
+                  className="cursor-pointer"
                   disabled={registerIsLoading}
                   onClick={() => handleRegistration("signup")}
                 >
@@ -203,7 +248,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword(!showLoginPassword)}
-                    className="absolute right-3 top-9 text-gray-500"
+                    className="absolute right-3 top-9 text-gray-500 cursor-pointer"
                   >
                     {showLoginPassword ? (
                       <EyeOff size={18} />
@@ -215,6 +260,7 @@ const Login = () => {
               </CardContent>
               <CardFooter>
                 <Button
+                  className="cursor-pointer"
                   disabled={loginIsLoading}
                   onClick={() => handleRegistration("login")}
                 >

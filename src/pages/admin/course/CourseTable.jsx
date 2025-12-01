@@ -25,7 +25,17 @@ const CourseTable = () => {
   if (isLoading) return <h1 className="text-center py-10">Loading...</h1>;
 
   return (
-    <div>
+    <div className="space-y-4">
+      {/* Mobile Button */}
+      <div className="lg:hidden">
+        <Button
+          className="w-full cursor-pointer mb-2"
+          onClick={() => navigate("/admin/dashboard")}
+        >
+          Go to Dashboard
+        </Button>
+      </div>
+
       <Button className="cursor-pointer" onClick={() => navigate("create")}>
         Create a new course
       </Button>

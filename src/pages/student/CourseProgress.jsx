@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   useCompleteCourseMutation,
+  useGetCertificateMutation,
   useGetCourseProgressQuery,
   useInCompleteCourseMutation,
   useUpdateLectureProgressMutation,
 } from "@/features/api/courseProgressApi";
-import { CheckCircle, CheckCircle2, CirclePlay } from "lucide-react";
+import { CheckCircle, CheckCircle2, CirclePlay, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,6 +18,9 @@ const CourseProgress = () => {
   const courseId = params.courseId;
   const { data, isLoading, isError, refetch } =
     useGetCourseProgressQuery(courseId);
+
+  const [getCertificate, { isLoading: loading }] = useGetCertificateMutation();
+
   const [updateLectureProgression] = useUpdateLectureProgressMutation();
   const [
     completeCourse,
@@ -28,6 +32,7 @@ const CourseProgress = () => {
       reset: resetComplete,
     },
   ] = useCompleteCourseMutation();
+
   const [
     inCompleteCourse,
     {
@@ -104,24 +109,63 @@ const CourseProgress = () => {
     await inCompleteCourse(courseId);
   };
 
+  const handleDownloadCertificate = async () => {
+    try {
+      const res = await getCertificate(courseId).unwrap();
+
+      if (res?.message) {
+        toast.error(res.message);
+        return;
+      }
+
+      const url = URL.createObjectURL(res);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${courseDetails.courseTitle}-certificate.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to download certificate");
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-4 mt-20">
       {/* Display course name */}
-      <div className="flex justify-between mb-4">
-        <h1 className="text-2xl font-bold mx-4">{courseTitle}</h1>
-        <Button
-          className="cursor-pointer"
-          onClick={completed ? handleInCompleteCourse : handleCompleteCourse}
-          variant={completed ? "outline" : "default"}
-        >
-          {completed ? (
-            <div className="flex items-center">
-              <CheckCircle className="h-4 w-4 mr-2" /> <span>Completed</span>
-            </div>
-          ) : (
-            "Mark as completed"
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold order-1">{courseTitle}</h1>
+
+        <div className="flex flex-col sm:flex-row gap-3 order-3 sm:order-2">
+          {completed && (
+            <Button
+              disabled={loading}
+              className="cursor-pointer bg-green-600 hover:bg-green-700 text-white order-3 sm:order-1"
+              onClick={handleDownloadCertificate}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                "Download Certificate"
+              )}
+            </Button>
           )}
-        </Button>
+
+          <Button
+            className="cursor-pointer order-2 sm:order-2"
+            onClick={completed ? handleInCompleteCourse : handleCompleteCourse}
+            variant={completed ? "outline" : "default"}
+          >
+            {completed ? (
+              <div className="flex items-center">
+                <CheckCircle className="h-4 w-4 mr-2" /> <span>Completed</span>
+              </div>
+            ) : (
+              "Mark as completed"
+            )}
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">

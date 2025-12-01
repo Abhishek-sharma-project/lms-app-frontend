@@ -8,11 +8,18 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetPurchaseCoursesQuery } from "@/features/api/purchaseApi";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
-  const { data, isError, isLoading } = useGetPurchaseCoursesQuery();
+  const { data, isError, isLoading, refetch } = useGetPurchaseCoursesQuery();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (isLoading) return <h1 className="mt-20 text-center py-10">Loading...</h1>;
   if (isError)
@@ -23,6 +30,15 @@ const Dashboard = () => {
     );
 
   const { purchasedCourse } = data || [];
+
+  if (!purchasedCourse || purchasedCourse.length === 0) {
+    return (
+      <Card className="shadow-lg p-10 text-center mt-30 text-gray-600">
+        <CardTitle>No Sales Yet</CardTitle>
+        <p>No sales data available yet</p>
+      </Card>
+    );
+  }
 
   const courseData = purchasedCourse.map((course) => ({
     name: course.courseId.courseTitle,
@@ -38,6 +54,15 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
+      {/* MOBILE BUTTON */}
+      <div className="lg:hidden mb-4">
+        <Button
+          className="w-full cursor-pointer"
+          onClick={() => navigate("/admin/course")}
+        >
+          Go to Courses
+        </Button>
+      </div>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>

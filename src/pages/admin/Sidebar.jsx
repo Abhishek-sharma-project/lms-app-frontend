@@ -10,7 +10,7 @@ const Sidebar = () => {
           <NavLink
             to="dashboard"
             className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-2 rounded-lg transition-all 
+              `flex items-center gap-2 px-3 py-2 rounded-lg transition-all
               ${
                 isActive
                   ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 font-semibold"
@@ -24,7 +24,7 @@ const Sidebar = () => {
           <NavLink
             to="course"
             className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-2 rounded-lg transition-all 
+              `flex items-center gap-2 px-3 py-2 rounded-lg transition-all
               ${
                 isActive
                   ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 font-semibold"

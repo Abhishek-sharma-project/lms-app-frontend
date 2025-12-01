@@ -18,11 +18,7 @@ import CourseDetail from "./pages/student/CourseDetail";
 import Purchase from "./components/Purchase";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
-import {
-  AdminRoute,
-  AuthenticatedUser,
-  ProtectedRoute,
-} from "./components/ProtectedRoutes";
+import { AdminRoute, ProtectedRoute } from "./components/ProtectedRoutes";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
 
 const App = () => {
