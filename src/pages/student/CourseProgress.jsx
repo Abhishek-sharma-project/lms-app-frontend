@@ -139,7 +139,7 @@ const CourseProgress = () => {
           {completed && (
             <Button
               disabled={loading}
-              className="cursor-pointer bg-green-600 hover:bg-green-700 text-white order-3 sm:order-1"
+              className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white order-3 sm:order-1"
               onClick={handleDownloadCertificate}
             >
               {loading ? (

@@ -12,7 +12,7 @@ export const ProtectedRoute = ({ children }) => {
 
 export const AuthenticatedUser = ({ children }) => {
   const { isAuthenticated } = useSelector((store) => store.auth);
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     return <Navigate to="/" />;
   }
   return children;
