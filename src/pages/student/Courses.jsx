@@ -12,7 +12,7 @@ const Courses = () => {
 
   if (isError) {
     return (
-      <h1 className="text-center py-20 text-2xl text-gray-700">
+      <h1 className="text-center py-20 text-2xl text-gray-700 dark:text-gray-400">
         Failed to load course details. Please refresh the page.
       </h1>
     );

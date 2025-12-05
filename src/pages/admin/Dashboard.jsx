@@ -33,9 +33,18 @@ const Dashboard = () => {
 
   if (!purchasedCourse || purchasedCourse.length === 0) {
     return (
-      <Card className="shadow-lg p-10 text-center mt-30 text-gray-600">
+      <Card className="shadow-lg p-10 text-center mt-30 text-gray-600 dark:text-gray-400">
         <CardTitle>No Sales Yet</CardTitle>
-        <p>No sales data available yet</p>
+        <p>
+          You don't have any sales data yet. Start by creating your first
+          course!
+        </p>
+        <Button
+          className="w-48 mx-auto cursor-pointer"
+          onClick={() => navigate("/admin/course")}
+        >
+          Create Course
+        </Button>
       </Card>
     );
   }
@@ -54,7 +63,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* MOBILE BUTTON */}
+      {/* Mobile button */}
       <div className="lg:hidden mb-4">
         <Button
           className="w-full cursor-pointer"
@@ -82,7 +91,7 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Cousre price card */}
+      {/* Course price card */}
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Course Prices</CardTitle>

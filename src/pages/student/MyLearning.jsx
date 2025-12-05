@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Course from "./Course";
 import { useLoadUserQuery } from "@/features/api/authApi";
 
 const MyLearning = () => {
-  const { data, isLoading } = useLoadUserQuery();
+  const { data, isLoading, refetch } = useLoadUserQuery();
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const myLearning = data?.user?.enrolledCourse || [];
 

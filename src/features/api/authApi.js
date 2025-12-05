@@ -69,7 +69,7 @@ export const authApi = createApi({
     }),
     deleteUser: builder.mutation({
       query: () => ({
-        url: "/profile/delete",
+        url: "profile/delete",
         method: "DELETE",
       }),
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
@@ -81,6 +81,12 @@ export const authApi = createApi({
         }
       },
     }),
+    becomeInstructor: builder.mutation({
+      query: () => ({
+        url: "become-instructor",
+        method: "PATCH",
+      }),
+    }),
   }),
 });
 
@@ -91,4 +97,5 @@ export const {
   useUpdateUserMutation,
   useLogoutUserMutation,
   useDeleteUserMutation,
+  useBecomeInstructorMutation,
 } = authApi;

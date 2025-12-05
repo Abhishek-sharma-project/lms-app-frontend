@@ -24,6 +24,7 @@ import {
   ProtectedRoute,
 } from "./components/ProtectedRoutes";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
+import InstructorPage from "./components/InstructorPage";
 
 const App = () => {
   const appRouter = createBrowserRouter([
@@ -66,11 +67,7 @@ const App = () => {
         },
         {
           path: "course/search",
-          element: (
-            <ProtectedRoute>
-              <SearchPage></SearchPage>
-            </ProtectedRoute>
-          ),
+          element: <SearchPage></SearchPage>,
         },
         {
           path: "course-detail/:courseId",
@@ -95,6 +92,14 @@ const App = () => {
               <PurchaseCourseProtectedRoute>
                 <CourseProgress></CourseProgress>
               </PurchaseCourseProtectedRoute>
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/instructor",
+          element: (
+            <ProtectedRoute>
+              <InstructorPage></InstructorPage>
             </ProtectedRoute>
           ),
         },

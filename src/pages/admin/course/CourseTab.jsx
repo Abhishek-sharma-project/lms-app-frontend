@@ -201,6 +201,7 @@ const CourseTab = () => {
           </Button>
           <Button
             disabled={removeLoading}
+            variant="destructive"
             className="cursor-pointer"
             onClick={removeCourseHandler}
           >

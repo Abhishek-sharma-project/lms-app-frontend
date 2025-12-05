@@ -18,13 +18,6 @@ import {
 } from "@/features/api/authApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const Login = () => {
   const [
@@ -57,7 +50,6 @@ const Login = () => {
     name: "",
     email: "",
     password: "",
-    role: "",
   });
 
   const [showLoginPassword, setShowLoginPassword] = useState(false);
@@ -151,27 +143,6 @@ const Login = () => {
                     required={true}
                     onChange={(e) => changeInputHandler(e, "signup")}
                   />
-                </div>
-                <div className="grid gap-3">
-                  <Label>Role</Label>
-                  <Select
-                    value={signupInput.role}
-                    onValueChange={(value) =>
-                      setSignupInput({ ...signupInput, role: value })
-                    }
-                  >
-                    <SelectTrigger className="w-full cursor-pointer">
-                      <SelectValue placeholder="Select role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem className="cursor-pointer" value="student">
-                        Student
-                      </SelectItem>
-                      <SelectItem className="cursor-pointer" value="instructor">
-                        Instructor
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
                 <div className="grid gap-3 relative">
                   <Label>Password</Label>

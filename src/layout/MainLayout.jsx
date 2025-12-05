@@ -9,7 +9,9 @@ const MainLayout = () => {
   const hideFooter =
     pathname.startsWith("/course-progress") ||
     pathname.startsWith("/purchase") ||
-    pathname.startsWith("/admin");
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/course/search") ||
+    pathname.startsWith("/login");
 
   return (
     <div className="flex flex-col min-h-screen">
