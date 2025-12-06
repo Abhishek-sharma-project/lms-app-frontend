@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useLoginUserMutation,
   useRegisterUserMutation,
@@ -20,24 +20,9 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [
-    registerUser,
-    {
-      data: registerData,
-      error: registerError,
-      isLoading: registerIsLoading,
-      isSuccess: registerIsSuccess,
-    },
-  ] = useRegisterUserMutation();
-  const [
-    loginUser,
-    {
-      data: loginData,
-      error: loginError,
-      isLoading: loginIsLoading,
-      isSuccess: loginIsSuccess,
-    },
-  ] = useLoginUserMutation();
+  const [registerUser, { isLoading: registerIsLoading }] =
+    useRegisterUserMutation();
+  const [loginUser, { isLoading: loginIsLoading }] = useLoginUserMutation();
 
   const navigate = useNavigate();
 
@@ -66,40 +51,24 @@ const Login = () => {
   };
 
   const handleRegistration = async (type) => {
-    const inputData = type === "signup" ? signupInput : loginInput;
-    const action = type === "signup" ? registerUser : loginUser;
-    await action(inputData);
+    try {
+      const inputData = type === "signup" ? signupInput : loginInput;
+      const action = type === "signup" ? registerUser : loginUser;
+
+      const res = await action(inputData).unwrap();
+
+      if (type === "signup") {
+        toast.success(res?.message);
+        setSignupInput({ name: "", email: "", password: "" });
+        setActiveTab("login");
+      } else {
+        toast.success(res?.message);
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message || "Something went wrong");
+    }
   };
-
-  useEffect(() => {
-    if (registerIsSuccess) {
-      toast.success(registerData?.message || "Signup Successful");
-
-      // Reset signup fields
-      setSignupInput({
-        name: "",
-        email: "",
-        password: "",
-        role: "",
-      });
-    }
-
-    setActiveTab("login");
-
-    if (registerError) {
-      toast.error(registerError?.data?.message || "Signup Failed");
-    }
-  }, [registerIsSuccess, registerData, registerError]);
-
-  useEffect(() => {
-    if (loginIsSuccess) {
-      toast.success(loginData?.message || "Login Successful");
-      navigate("/");
-    }
-    if (loginError) {
-      toast.error(loginError?.data?.message || "Login Failed");
-    }
-  }, [loginIsSuccess, loginData, loginError]);
 
   return (
     <div className="flex items-center w-full justify-center mt-18">
@@ -175,9 +144,10 @@ const Login = () => {
                   onClick={() => handleRegistration("signup")}
                 >
                   {registerIsLoading ? (
-                    <Loader2 className="m-2 h-4 w-4 animate-spin">
+                    <>
+                      <Loader2 className="m-2 h-4 w-4 animate-spin" />
                       Please wait
-                    </Loader2>
+                    </>
                   ) : (
                     "Signup"
                   )}
@@ -237,9 +207,8 @@ const Login = () => {
                 >
                   {loginIsLoading ? (
                     <>
-                      <Loader2 className="m-2 h-4 w-4 animate-spin">
-                        Please wait
-                      </Loader2>
+                      <Loader2 className="m-2 h-4 w-4 animate-spin" />
+                      Please wait
                     </>
                   ) : (
                     "Login"
