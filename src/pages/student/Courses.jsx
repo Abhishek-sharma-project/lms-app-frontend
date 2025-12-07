@@ -1,14 +1,20 @@
-import React, { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import Course from "./Course";
+import React from "react";
 import { useGetPublishedCourseQuery } from "@/features/api/courseApi";
+import Course from "./Course";
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+import Autoplay from "embla-carousel-autoplay";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Courses = () => {
-  const { data, isError, isLoading, refetch } = useGetPublishedCourseQuery();
-
-  useEffect(() => {
-    refetch();
-  }, []);
+  const { data, isLoading, isError } = useGetPublishedCourseQuery();
 
   if (isError) {
     return (
@@ -19,21 +25,62 @@ const Courses = () => {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-[#141414]">
-      <div className="max-w-7xl mx-auto p-6">
-        <h2 className="font-bold text-3xl text-center mb-10">Our Courses</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {isLoading
-            ? Array.from({ length: 8 }).map((_, index) => (
-                <CourseSkeleton key={index}></CourseSkeleton>
-              ))
-            : data?.courses &&
-              data.courses.map((course, i) => (
-                <Course key={i} course={course}></Course>
-              ))}
-        </div>
+    <section className="w-full py-10 bg-gray-50 dark:bg-[#141414]">
+      <div className="text-center mt-4 mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+          Discover Courses That Help You Grow
+        </h2>
+
+        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-3 text-sm md:text-base">
+          Learn from expert instructors and upgrade your skills with our curated
+          collection of high-quality courses designed to accelerate your career.
+        </p>
+
+        <div className="w-24 h-[3px] bg-blue-600 dark:bg-blue-500 mx-auto mt-4 rounded-full"></div>
       </div>
-    </div>
+
+      <div className="max-w-7xl mx-auto relative">
+        {isLoading ? (
+          <Carousel>
+            <CarouselContent>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <CarouselItem key={index} className="basis-80 pl-2">
+                  <CourseSkeleton />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        ) : (
+          <Carousel
+            className="w-full"
+            opts={{
+              loop: true,
+            }}
+            plugins={[
+              Autoplay({
+                delay: 2500,
+                stopOnInteraction: false,
+                stopOnMouseEnter: true,
+              }),
+            ]}
+          >
+            <CarouselContent>
+              {data?.courses?.map((course, index) => (
+                <CarouselItem
+                  key={index}
+                  className="pl-1 pr-1 sm:pl-2 sm:pr-2 flex-none w-auto mx-auto"
+                >
+                  <Course course={course} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            <CarouselPrevious className="left-0" />
+            <CarouselNext className="right-0" />
+          </Carousel>
+        )}
+      </div>
+    </section>
   );
 };
 
