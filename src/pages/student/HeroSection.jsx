@@ -57,9 +57,8 @@ const HeroSection = () => {
             plugins={[
               Autoplay({
                 delay: 2500,
-                stopOnInteraction: true,
-                stopOnFocusIn: true,
-                jump: false,
+                stopOnInteraction: false,
+                stopOnMouseEnter: true,
               }),
             ]}
             opts={{ loop: true }}

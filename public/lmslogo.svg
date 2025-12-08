@@ -1,0 +1,30 @@
+<svg 
+  width="40" 
+  height="40" 
+  viewBox="0 0 40 40" 
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Left angle bracket < (Bold, Black) -->
+  <text 
+    x="6" 
+    y="28" 
+    font-size="28" 
+    font-family="monospace" 
+    font-weight="900"
+    fill="#000000"
+  >
+    &lt;
+  </text>
+
+  <!-- Right angle bracket > (Bold, Blue) -->
+  <text 
+    x="22" 
+    y="28" 
+    font-size="28" 
+    font-family="monospace" 
+    font-weight="900"
+    fill="#2563eb"
+  >
+    &gt;
+  </text>
+</svg>

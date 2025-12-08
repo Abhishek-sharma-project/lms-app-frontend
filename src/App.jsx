@@ -25,8 +25,12 @@ import {
 } from "./components/ProtectedRoutes";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
 import InstructorPage from "./components/InstructorPage";
+import CategoriesSection from "./components/CategoriesSection";
+import FeaturesSection from "./components/FeaturesSection";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const { isAuthenticated } = useSelector((store) => store.auth);
   const appRouter = createBrowserRouter([
     {
       path: "/",
@@ -38,6 +42,8 @@ const App = () => {
             <>
               <HeroSection></HeroSection>
               <Courses></Courses>
+              <CategoriesSection></CategoriesSection>
+              {!isAuthenticated && <FeaturesSection></FeaturesSection>}
             </>
           ),
         },

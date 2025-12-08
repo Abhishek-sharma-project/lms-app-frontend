@@ -103,7 +103,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 my-24">
+    <div className="max-w-4xl mx-auto px-4 my-24 bg-slate-50 dark:bg-[#050816]">
       <h1 className="font-bold text-2xl text-center md:text-left">Profile</h1>
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
         <div className="flex flex-col items-center">
@@ -251,7 +251,7 @@ const Profile = () => {
 export default Profile;
 
 const ProfileSkeleton = () => {
-  const enrolledCourses = [1, 2];
+  const enrolledCourses = [1, 2, 3, 4];
 
   return (
     <div className="max-w-4xl mx-auto px-4 my-24">

@@ -16,7 +16,7 @@ const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar></Navbar>
-      <div className="flex-1">
+      <div className="flex-1 bg-slate-50 dark:bg-[#050816]">
         <Outlet></Outlet>
       </div>
       {!hideFooter && <Footer></Footer>}

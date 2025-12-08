@@ -25,7 +25,7 @@ const Courses = () => {
   }
 
   return (
-    <section className="w-full py-10 bg-gray-50 dark:bg-[#141414]">
+    <section className="w-full py-10 bg-slate-50 dark:bg-[#050816]">
       <div className="text-center mt-4 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
           Discover Courses That Help You Grow
@@ -75,8 +75,8 @@ const Courses = () => {
               ))}
             </CarouselContent>
 
-            <CarouselPrevious className="left-0" />
-            <CarouselNext className="right-0" />
+            <CarouselPrevious className="left-0 cursor-pointer" />
+            <CarouselNext className="right-0 cursor-pointer" />
           </Carousel>
         )}
       </div>
